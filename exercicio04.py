@@ -59,7 +59,7 @@ if Resultado >= 0:
 else:
     MensagemFinal2 = "b: NEGATIVO"
 
-if not int(Resultado):
+if int(Resultado) != Resultado:
     MensagemFinal3 = "c: DECIMAL"
 else:
     MensagemFinal3 = "c: INTEIRO"
