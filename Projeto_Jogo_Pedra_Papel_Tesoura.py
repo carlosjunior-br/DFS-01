@@ -18,6 +18,7 @@ do pacote random pararealizar a escolha do computador.
 """
 
 import random
+import os
 
 def valida_sim_nao(mensagem: str) -> str:
     Controle = True
@@ -47,30 +48,29 @@ def valida_escolha(mensagem: str) -> str:
             print("Resposta inválida! Digite PE, PA ou TE.", end="\n\n")
             
 def resultado(usuario: str, pc: str) -> str:
-    if usuario == "Pedra" and pc == "Pedra":
-        mensagem_final = "Empate"
-    if usuario == "Papel" and pc == "Papel":
-        mensagem_final = "Empate"
-    if usuario == "Tesoura" and pc == "Tesoura":
-        mensagem_final = "Empate"
+    if (usuario == "Pedra" and pc == "Pedra") or (usuario == "Papel" and pc == "Papel") or (usuario == "Tesoura" and pc == "Tesoura"):
+        vencedor = "0"
     
-    if usuario == "Pedra" and pc == "Papel":
-        mensagem_final = "O computador venceu!"
-    if usuario == "Papel" and pc == "Tesoura":
-        mensagem_final = "O computador venceu!"
-    if usuario == "Tesoura" and pc == "Pedra":
-        mensagem_final = "O computador venceu!"
+    if (usuario == "Pedra" and pc == "Papel") or (usuario == "Papel" and pc == "Tesoura") or (usuario == "Tesoura" and pc == "Pedra"):
+        vencedor = "PC"
+    
+    if (usuario == "Pedra" and pc == "Tesoura") or (usuario == "Papel" and pc == "Pedra") or (usuario == "Tesoura" and pc == "Papel"):
+        vencedor = "USU"
+    
+    return vencedor
 
-    if usuario == "Pedra" and pc == "Tesoura":
-        mensagem_final = "Parabéns, você venceu o computador!"
-    if usuario == "Papel" and pc == "Pedra":
-        mensagem_final = "Parabéns, você venceu o computador!"
-    if usuario == "Tesoura" and pc == "Papel":
-        mensagem_final = "Parabéns, você venceu o computador!"
-    
-    return mensagem_final
+def placar_final (pc: int, usu: int) -> str:
+    if pc > usu:
+        return "O COMPUTADOR FOI O CAMPEÃO!"
+    elif usu > pc:
+        return "VOCÊ FOI O CAMPEÃO!"
+    else:
+        return "VOCÊ E O COMPUTADOR TIVERAM O MESMO NÚMERO DE VITÓRIAS, PORTANTO EMPATOU!"
         
 Lista_PC = ["Pedra", "Papel", "Tesoura"]
+conta_empate = 0
+conta_pc = 0
+conta_usu = 0
 Controle_Jogo = True
 while Controle_Jogo:
     print(" ")
@@ -78,11 +78,28 @@ while Controle_Jogo:
     Escolha = valida_escolha("Escolha: Pedra (PE), Papel (PA) ou Tesoura (TE): ")
     Escolha_PC = random.choice(Lista_PC)
     print(" ")
-    print("A sua escolha foi..............:", Escolha)
-    print("A escolha do compurador foi....:", Escolha_PC, end="\n\n")
-    print("--------------------O RESULTADO DO JOGO FOI:-------------------", end="\n\n")
-    print(resultado(Escolha, Escolha_PC), end="\n\n")
+    print("A sua escolha foi..........:", Escolha)
+    print("A escolha do compurador foi:", Escolha_PC, end="\n\n")
+    if resultado(Escolha, Escolha_PC) == "0":
+        mensagem_final = "Empate!"
+        conta_empate += 1
+    elif resultado(Escolha, Escolha_PC) == "PC":
+        mensagem_final = "O computador venceu!"
+        conta_pc += 1
+    elif resultado(Escolha, Escolha_PC) == "USU":
+        mensagem_final = "Parabéns, você venceu o computador!"
+        conta_usu += 1
+    print("-------------------O RESULTADO DA RODADA FOI:------------------", end="\n\n")
+    print(mensagem_final, end="\n\n")
+    print("-----------------------------PLACAR:---------------------------", end="\n\n")
+    print("USUÁRIO...: ", conta_usu)
+    print("COMPUTADOR: ", conta_pc)
+    print("EMPATE....: ", conta_empate)
     print("---------------------------------------------------------------", end="\n\n")
     if valida_sim_nao("Deseja continuar jogando? (S/N)") == "N":
-        print("Jogo encerrado.", end="\n\n")
+        print(" ")
+        print("-------------------------JOGO ENCERRADO------------------------", end="\n\n")
+        print(placar_final(conta_pc, conta_usu), end="\n\n")
         Controle_Jogo = False
+    else:
+        os.system('cls' if os.name == 'nt' else 'clear')
